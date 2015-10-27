@@ -37,3 +37,7 @@ positionInBounds (There p) = InLater (positionInBounds p)
 lookupElemEq : (prf:Elem x xs) -> index (position prf) xs {ok=positionInBounds prf} = x
 lookupElemEq Here = Refl
 lookupElemEq (There p) = lookupElemEq p
+
+createElem : index n xs {ok} = x -> Elem x xs
+createElem Refl {ok=InFirst} = Here
+createElem Refl {ok=InLater _} = There (createElem Refl)
