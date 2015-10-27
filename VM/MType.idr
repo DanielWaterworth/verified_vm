@@ -4,7 +4,13 @@ import Data.Fin
 
 import Elem
 
-data MType = MWord64 | MBool | MUnit | MStruct (List MType) | MArray Nat MType
+data MType =
+  MWord64 |
+  MBool |
+  MUnit |
+  MStruct (List MType) |
+  MUnion (List MType) |
+  MArray Nat MType
 
 data TypeIndex : MType -> MType -> Type where
   ID : TypeIndex a a
