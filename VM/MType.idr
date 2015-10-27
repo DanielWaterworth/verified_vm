@@ -6,6 +6,8 @@ import Data.Vect
 import Always
 import Elem
 
+%default total
+
 data MType =
   MWord64 |
   MBool |
@@ -27,3 +29,15 @@ data MValue : MType -> Type where
   VStruct : Always MValue types -> MValue (MStruct types)
   VUnion : MValue ty -> Elem ty types -> MValue (MUnion types)
   VArray : Vect n (MValue ty) -> MValue (MArray n ty)
+
+view : TypeIndex a b -> MValue a -> MValue b
+view ID x = x
+view (Trans f g) x = view g (view f x)
+view (StructField elem) (VStruct elements) = index elem elements
+view (ArrayIndex n) (VArray elements) = index n elements
+
+set : TypeIndex a b -> MValue b -> MValue a -> MValue a
+set ID x _ = x
+set (Trans f g) x y = set f (set g x (view f y)) y
+set (StructField elem) x (VStruct elements) = VStruct (replaceAt elem x elements)
+set (ArrayIndex n) x (VArray elements) = VArray (replaceAt n x elements)
