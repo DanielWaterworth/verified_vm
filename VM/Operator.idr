@@ -19,5 +19,3 @@ data Operator : FunctionSignature -> Type where
   XOR : Operator (MkFunctionSignature [MBool, MBool] MBool)
   XNOR : Operator (MkFunctionSignature [MBool, MBool] MBool)
   NOT : Operator (MkFunctionSignature [MBool] MBool)
-
-  NOP : Operator (MkFunctionSignature [] MUnit)
