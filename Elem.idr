@@ -2,9 +2,6 @@ module Elem
 
 %default total
 
-fromYes : (prf:Dec x) -> {auto ok : (prf = Yes p)} -> x
-fromYes _ {p} = p
-
 data Elem : a -> List a -> Type where
   Here : Elem x (x :: xs)
   There : Elem x xs -> Elem x (y :: xs)
