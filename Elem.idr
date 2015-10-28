@@ -9,6 +9,15 @@ data Elem : a -> List a -> Type where
   Here : Elem x (x :: xs)
   There : Elem x xs -> Elem x (y :: xs)
 
+instance DecEq (Elem x xs) where
+  decEq Here Here = Yes Refl
+  decEq Here (There _) = No (\Refl impossible)
+  decEq (There _) Here = No (\Refl impossible)
+  decEq (There x) (There y) =
+    case x `decEq` y of
+      Yes prf => Yes (cong prf)
+      No f => No (\Refl => f Refl)
+
 instance Uninhabited (Elem x []) where
   uninhabited Here impossible
   uninhabited (There _) impossible
